@@ -18,6 +18,10 @@ worksheet.columns = [
 const app = express();
 var server = http.createServer(app);
 
+app.get("/", (req, res) => {
+  res.send("Hello, Firebase Admin!");
+});
+
 app.get("/export", async (req, res) => {
   // What is the file name
   const FILE_NAME = 'porsche.xlsx';
