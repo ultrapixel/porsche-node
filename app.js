@@ -73,6 +73,7 @@ app.get("/export", async (req, res) => {
       });
       page++;
       console.log('Total page:', page);
+      res.send('Total page:', page);
     } catch (error) {
       console.log('Something went wrong');
       console.error(error?.response?.data?.message);
