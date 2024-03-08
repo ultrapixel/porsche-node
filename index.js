@@ -90,14 +90,17 @@ app.get("/export", async (req, res) => {
     worksheet.addRow(row);
   });
   // Save the workbook to a file
-  workbook.xlsx
-    .writeFile(FILE_NAME)
-    .then(() => {
-      console.log('Excel file created successfully.');
-    })
-    .catch((error) => {
-      console.error('Error creating Excel file:', error);
-    });
+  try {
+    // Anstatt die Datei physisch zu speichern, senden Sie den Inhalt direkt an den Client.
+    res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    res.setHeader('Content-Disposition', 'attachment; filename=' + FILE_NAME);
+
+    await workbook.xlsx.write(res); // Schreibt die Datei direkt in die Response
+    res.end(); // Beendet die Response, sendet die Datei zum Client
+  } catch (error) {
+    console.error('Error sending Excel file:', error);
+    res.status(500).send('Error creating Excel file');
+  }
 });
 
 const port = process.env.PORT || 3000;
